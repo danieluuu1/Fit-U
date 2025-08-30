@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Formulario de Rutina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="container py-5">
+
+    <div class="routine-wrapper d-flex align-items-start gap-4">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo FIT-U" class="logo">
+        </div>
+
+        <div class="routine-form-container flex-grow-1">
+            <h1>Generar Rutina de Gimnasio</h1>
+            <form id="routine-form" class="mt-4">
+                <!-- aquí va todo tu formulario tal cual -->
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="age" class="form-label">Edad</label>
+                        <input type="number" class="form-control" id="age" min="1" required>
+                    </div>
+                    <div class="col">
+                        <label for="weight" class="form-label">Peso (kg)</label>
+                        <input type="number" step="0.1" class="form-control" id="weight" min="1" required>
+                    </div>
+                    <div class="col">
+                        <label for="height" class="form-label">Altura (cm)</label>
+                        <input type="number" step="0.1" class="form-control" id="height" min="1" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="gender" class="form-label">Género</label>
+                        <select id="gender" class="form-select" required>
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="goal" class="form-label">Objetivo</label>
+                        <select id="goal" class="form-select" required>
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option value="Masa muscular">Masa muscular</option>
+                            <option value="Pérdida de grasa">Pérdida de grasa</option>
+                            <option value="Resistencia">Resistencia</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="level" class="form-label">Nivel</label>
+                        <select id="level" class="form-select" required>
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option value="Principiante">Principiante</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="days" class="form-label">Días por semana</label>
+                        <select id="days" class="form-select" required>
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option value="3">3 días</option>
+                            <option value="4">4 días</option>
+                            <option value="5">5 días</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Generar rutina</button>
+            </form>
+
+            <div id="result" class="mt-5"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('routine-form').addEventListener('submit', async e => {
+            e.preventDefault();
+
+            const age = +e.target.age.value;
+            const weight = +e.target.weight.value;
+            const height = +e.target.height.value;
+            const gender = e.target.gender.value;
+            const goal = e.target.goal.value;
+            const level = e.target.level.value;
+            const days = +e.target.days.value;
+
+            if (!age || !weight || !height || !gender || !goal || !level || !days) {
+                return alert('Por favor completa todos los campos.');
+            }
+
+            const resultDiv = document.getElementById('result');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+
+            // Mostrar mensaje de carga
+            resultDiv.innerHTML = `<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Generando rutina...</p></div>`;
+            submitButton.disabled = true;
+
+            try {
+                const token = localStorage.getItem('access_token');
+                const res = await fetch('/routine', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ age, weight, height, gender, goal, level, days })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Error generando la rutina'}</div>`;
+                    return;
+                }
+
+                resultDiv.innerHTML =
+                    `<h3 class="text-center">Rutina Generada</h3><pre>${data.routine}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="alert alert-danger">Error de conexión o del servidor.</div>`;
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+
+
+</html>

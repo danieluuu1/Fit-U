@@ -1,0 +1,147 @@
+body {
+    background: #f7f7f9;
+    color: #222;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Contenedor general para formularios (login, registro, rutina) */
+.container,
+.auth-container {
+    max-width: 600px;
+    margin: 48px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    padding: 40px 32px;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #222;
+    font-size: 1.6rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+label {
+    font-size: 1.05rem;
+}
+
+input,
+select,
+button {
+    font-size: 1.05rem;
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #f9f9fb;
+    transition: border 0.2s;
+}
+
+input:focus,
+select:focus {
+    border: 1.5px solid #6c63ff;
+    outline: none;
+}
+
+button {
+    background: #6c63ff;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1.1rem;
+}
+
+button:hover {
+    background: #554ee0;
+}
+
+.link {
+    color: #6c63ff;
+    text-decoration: none;
+    font-size: 0.97rem;
+    margin-top: 8px;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.error {
+    color: #e74c3c;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.success {
+    color: #27ae60;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.routine-list {
+    margin-top: 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.routine-list li {
+    background: #f3f3f7;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    font-size: 1.02rem;
+}
+
+/* Contenedor de la rutina generada */
+#result {
+    max-width: 80%;
+    margin: 30px auto;
+    padding: 24px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9fb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Estilo para el logo en login y registro */
+.logo {
+    max-width: 250px;
+    /* tamaño más grande */
+    height: auto;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+
+    .container,
+    .auth-container {
+        max-width: 95vw;
+        padding: 18px 6vw;
+    }
+
+    #result pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        overflow-x: hidden;
+        font-size: 1rem;
+    }
+}
